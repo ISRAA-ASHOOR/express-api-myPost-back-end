@@ -72,11 +72,27 @@ async function deletePost(req, res) {
     }
 }
 
+async function addComment(req, res){
+    try{
+        const post = await Post.findById(req.params.id);
+        post.comments.push(req.body);
+        await post.save();
+        const newComment = post.comments[post.comments.length - 1];
+
+        newComment._doc.author = req.user;
+
+        res.status(201).json(newComment);
+    } catch(error){
+        console.log(error)
+    }
+}
+
 
 module.exports = {
     createPost,
     getAllPosts,
     getPostById,
     updatePost,
-    deletePost
+    deletePost,
+    addComment
 }
