@@ -20,6 +20,7 @@ async function createPost(req, res) {
         return res.status(201).json(createdPost)
     } catch (error) {
         console.log(error)
+        res.status(500).json({ error: error.message });
     }
 }
 
@@ -30,6 +31,7 @@ async function getAllPosts(req, res){
         return res.status(200).json(posts);
     } catch (error) {
         console.log(error)
+        res.status(500).json({ error: error.message });
     }
 }
 
@@ -39,6 +41,7 @@ async function getPostById(req, res) {
         return res.json(post)
     } catch (error) {
         console.log(error)
+        res.status(500).json({ error: error.message });
     }
 }
 
@@ -60,6 +63,7 @@ async function updatePost(req, res) {
         return res.json(updatedPost)
     } catch (error) {
         console.log(error)
+        res.status(500).json({ error: error.message });
     }
 }
 
@@ -69,21 +73,49 @@ async function deletePost(req, res) {
         return res.json(deletePost)
     } catch (error) {
         console.log(error)
+        res.status(500).json({ error: error.message });
     }
 }
 
 async function addComment(req, res){
     try{
         const post = await Post.findById(req.params.id);
-        post.comments.push(req.body);
-        await post.save();
-        const newComment = post.comments[post.comments.length - 1];
+        const createdComment = post.comments.create({
+            text : req.body.text,
+            author: req.user._id
+        });
 
-        newComment._doc.author = req.user;
-
-        res.status(201).json(newComment);
+        post.comments.push(createdComment)
+        await post.save()
+        return res.status(201).json(post);
     } catch(error){
         console.log(error)
+        res.status(500).json({ error: error.message });
+    }
+}
+
+async function updateComment(req, res){
+    try{
+        const post = await Post.findById(req.params.id);
+        const comment = post.comments.id(req.params.commentId);
+        comment.text = req.body.text;
+        await post.save();
+        return res.status(201).json(post);
+    } catch(error){
+        console.log(error)
+        res.status(500).json({ error: error.message });
+    }
+}
+
+async function deleteComment(req, res){
+    try{
+        const post = await Post.findById(req.params.id);
+        post.comments.remove({_id: req.params.commentId});
+        await post.save();
+        return res.json(post)
+    } catch(error){
+        console.log(error)
+        res.status(500).json({ error: error.message });
     }
 }
 
@@ -94,5 +126,7 @@ module.exports = {
     getPostById,
     updatePost,
     deletePost,
-    addComment
+    addComment,
+    updateComment,
+    deleteComment
 }

@@ -12,5 +12,7 @@ router.get('/:id', verifyToken , postController.getPostById)
 router.put('/:id', verifyToken , postController.updatePost)
 router.delete('/:id', verifyToken , postController.deletePost)
 router.post("/:id/comments", verifyToken, postController.addComment)
+router.put("/:id/comments/:commentId", verifyToken, postController.updateComment)
+router.delete("/:id/comments/:commentId", verifyToken, postController.deleteComment)
 
 module.exports = router
