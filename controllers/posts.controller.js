@@ -63,10 +63,20 @@ async function updatePost(req, res) {
     }
 }
 
+async function deletePost(req, res) {
+    try {
+        const deletedPost = await Post.findByIdAndDelete(req.params.id)
+        return res.json(deletePost)
+    } catch (error) {
+        console.log(error)
+    }
+}
+
 
 module.exports = {
     createPost,
     getAllPosts,
     getPostById,
-    updatePost
+    updatePost,
+    deletePost
 }

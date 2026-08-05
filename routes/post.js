@@ -10,5 +10,6 @@ router.get('/', postController.getAllPosts)
 router.post('/', verifyToken , postController.createPost)
 router.get('/:id', verifyToken , postController.getPostById)
 router.put('/:id', verifyToken , postController.updatePost)
+router.delete('/:id', verifyToken , postController.deletePost)
 
 module.exports = router
