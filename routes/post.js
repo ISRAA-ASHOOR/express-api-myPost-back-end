@@ -9,5 +9,6 @@ const router = Router()
 router.get('/', postController.getAllPosts)
 router.post('/', verifyToken , postController.createPost)
 router.get('/:id', verifyToken , postController.getPostById)
+router.put('/:id', verifyToken , postController.updatePost)
 
 module.exports = router

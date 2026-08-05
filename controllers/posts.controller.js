@@ -7,8 +7,7 @@ async function createPost(req, res) {
         const {
             title,
             text,
-            img,
-            author
+            img
         } = req.body
 
         const createdPost = await Post.create({
@@ -43,9 +42,31 @@ async function getPostById(req, res) {
     }
 }
 
+async function updatePost(req, res) {
+    try {
+        const {
+            title,
+            text,
+            img
+        } = req.body
+
+        const updatedPost = await Post.findByIdAndUpdate(req.params.id, {
+            title,
+            text,
+            img
+        }, { new: true })
+
+
+        return res.json(updatedPost)
+    } catch (error) {
+        console.log(error)
+    }
+}
+
 
 module.exports = {
     createPost,
     getAllPosts,
-    getPostById
+    getPostById,
+    updatePost
 }
