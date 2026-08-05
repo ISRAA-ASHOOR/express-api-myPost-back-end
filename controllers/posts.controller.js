@@ -20,17 +20,22 @@ async function createPost(req, res) {
 
         return res.status(201).json(createdPost)
     } catch (error) {
-        if (error.name === "ValidationError") {
-            return res.status(400).json({ message: error.message })
-        }
         console.log(error)
-        res.status(500).json({ message: error.message })
+    }
+}
+
+async function getAllPosts(req, res){
+    try{
+        const posts = await Post.find()
+        console.log(posts)
+        return res.status(200).json(posts);
+    } catch (error) {
+        console.log(error)
     }
 }
 
 
-
-
 module.exports = {
     createPost,
+    getAllPosts
 }
