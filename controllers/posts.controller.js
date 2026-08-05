@@ -34,8 +34,18 @@ async function getAllPosts(req, res){
     }
 }
 
+async function getPostById(req, res) {
+    try {
+        const post = await Post.findById(req.params.id)
+        return res.json(post)
+    } catch (error) {
+        console.log(error)
+    }
+}
+
 
 module.exports = {
     createPost,
-    getAllPosts
+    getAllPosts,
+    getPostById
 }
